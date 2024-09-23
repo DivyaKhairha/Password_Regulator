@@ -153,15 +153,24 @@ class Set_up:
                 messagebox.showinfo(title="Password",message=f"Website:{show}\nEmail:{show1}\nPassword:{show2}\nMisc:{show3}")
             
     def add_mail_clicked(self):
-        with open("Used_mails.txt","a") as file:
-            file.write(f"\n{self.mail_entry.get()}")
-        with open("Used_mails.txt") as file:
-            global my_mails
-            my_mails = []
-            for i in file.readlines():
-                my_mails.append(i)          
-        self.mail_entry.config(values=my_mails)
-        messagebox.showinfo(title="Added",message="Email added succesfully")
+        new_mail = self.mail_entry.get().strip()
+        
+        if not new_mail:
+            messagebox.showwarning(title="Invalid Entry", message="Email cannot be empty!")
+            return
+
+        with open("Used_mails.txt", "r+") as file:
+            existing_mails = set([mail.strip() for mail in file.readlines()])
+            
+            if new_mail in existing_mails:
+                messagebox.showwarning(title="Duplicate", message="This email is already added!")
+            else:
+                file.write(f"{new_mail}\n")
+                existing_mails.add(new_mail)
+        
+                self.mail_entry.config(values=list(existing_mails))
+                messagebox.showinfo(title="Added", message="Email added successfully")
+
         
 with open("Used_mails.txt") as file:
     global my_mails

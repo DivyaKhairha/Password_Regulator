@@ -1,7 +1,14 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox,ttk
 import json as js
 
+
+with open("Used_mails.txt") as file:
+    global my_mails
+    my_mails = []
+    for i in file.readlines():
+        my_mails.append(i)
+    
 def window_setup():
     global window
     window = tk.Tk()
@@ -38,27 +45,30 @@ def adding_canvas():
     canvas.grid(row = 0,column=1)
 
 def create_buttons():
-    global add,generate
+    global add,generate,add_new_mail
     #CREATING BUTTONS
     add = tk.Button(text = "Add Password",command=add_clicked)
     generate = tk.Button(text= "Genrate",command=generate_click)
     search = tk.Button(text="Search",command=search_clicked)
+    add_new_mail = tk.Button(text="Add new mail",command=add_mail_clicked)
 
     #PLACING BUTTONS
     add.grid(row = 8,column = 1)
     generate.grid(row = 3,column=2)
     search.grid(row = 2,column=2)
+    add_new_mail.grid(row=4,column=2)
 
     #EDITING BUTTONS
     add.config(bg="#fefefe",font=("Arial",11),width=25)
     generate.config(bg="#fefefe",font=("Arial",11),width=10)
     search.config(bg="#fefefe",font=("Arial",11),width=10)
+    add_new_mail.config(bg="#fefefe",font=("Arial",11),width=10)
 
 def create_entry():
     global website1,mail1,misc1,passw1
     #CREATING ENTRY BOXES
     website1 = tk.Entry(width = 30)
-    mail1 = tk.Entry(width = 30)
+    mail1 = ttk.Combobox(values=my_mails,width=28)
     misc1 = tk.Entry(width = 30)
     passw1 = tk.Entry(width = 30)
 
@@ -70,7 +80,7 @@ def create_entry():
 
     #EDITING ENTRY BOXES
     website1.config(bg="#fefefe",highlightthickness=0.5,font=("Arial",14))
-    mail1.config(bg="#fefefe",highlightthickness=0.5,font=("Comfortaa",14))
+    mail1.config(background="#fefefe",font=("Arial",14))
     misc1.config(bg="#fefefe",highlightthickness=0.5,font=("Arial",14))
     passw1.config(bg="#fefefe",highlightthickness=0.5,font=("Arial",14))
     
@@ -149,6 +159,18 @@ def search_clicked():
                     
             messagebox.showinfo(title="Password",message=f"Website:{show}\nEmail:{show1}\nPassword:{show2}\nMisc:{show3}")
         
+def add_mail_clicked():
+    with open("Used_mails.txt","a") as file:
+        file.write(f"\n{mail1.get()}")
+    with open("Used_mails.txt") as file:
+        global my_mails
+        my_mails = []
+        for i in file.readlines():
+            my_mails.append(i)
+    mail1.config(values=my_mails)
+    add_new_mail.config(text="Added")
+    window.after()
+        
     
 window_setup()
 create_labels()
@@ -158,7 +180,6 @@ adding_canvas()
 
 
 website1.focus()
-mail1.insert(0,"divyakhairhda13@gmail.com")
 
 
 

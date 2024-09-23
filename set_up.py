@@ -7,7 +7,7 @@ import random as r
 class Set_up:
     def __init__(self):
         self.window_setup()
-    
+        
     def window_setup(self):
         self.window = tk.Tk()
         self.window.config(padx=50,pady=50,bg = "#fefefe")
